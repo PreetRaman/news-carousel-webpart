@@ -1,0 +1,18 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "nodeVersion": "18.17.1",
+    "sdksVersions": {},
+    "version": "1.21.1",
+    "libraryName": "news-carousel",
+    "libraryId": "c747cbae-45d0-4db1-badb-fec60819c7e5",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "news-carousel",
+    "solutionShortDescription": "news-carousel description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}

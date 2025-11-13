@@ -1,0 +1,309 @@
+@import '~@fluentui/react/dist/sass/References.scss';
+
+$primaryColor: #302682;
+
+// Global override for SharePoint web part containers
+:global {
+  [data-sp-webpart] {
+    max-width: none !important;
+  }
+  
+  .CanvasSection {
+    max-width: none !important;
+  }
+  
+  .ControlZone {
+    max-width: none !important;
+  }
+  
+  // Override the SharePoint legacy fabric block that constrains width
+  .ms-SPLegacyFabricBlock {
+    width: 100% !important;
+    max-width: none !important;
+  }
+  
+  // New class for 90% width - only newsCarousel
+  [class*="newsCarousel_"] {
+    width: 90% !important;
+  }
+}
+
+.newsCarousel {
+  width: 90% !important;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 0;
+    color: $primaryColor;
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .viewAllButton {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #eae9f2;
+    color: $primaryColor;
+    text-decoration: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+    white-space: nowrap;
+
+    &:hover {
+      background-color: darken(#eae9f2, 8%);
+      color: $primaryColor;
+      text-decoration: none;
+    }
+
+    &:focus {
+      outline: 2px solid $primaryColor;
+      outline-offset: 2px;
+    }
+  }
+
+  .carouselContainer {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    width: 100%;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 60px;
+    min-height: 380px;
+  }
+
+  .carousel {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 380px;
+    padding: 0;
+    overflow: visible;
+    position: relative;
+  }
+
+  .arrowLeft,
+  .arrowRight {
+    background: transparent;
+    color: #605e5c;
+    border: none;
+    cursor: pointer;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: opacity 0.3s ease;
+    position: absolute !important;
+    padding: 10px !important;
+    box-sizing: border-box;
+    z-index: 10;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    flex-shrink: 0;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  .arrowIcon {
+    width: 24px !important;
+    height: 24px !important;
+    display: block !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    pointer-events: none;
+    
+    path {
+      stroke: #605e5c !important;
+      stroke-width: 2.5 !important;
+    }
+  }
+
+  .arrowLeft {
+    left: 0 !important;
+    right: auto !important;
+  }
+
+  .arrowRight {
+    right: 0 !important;
+    left: auto !important;
+  }
+
+  .navigation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 20px;
+  }
+
+  .arrowNavLeft,
+  .arrowNavRight {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    transition: opacity 0.3s ease;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  .arrowNavIcon {
+    width: 20px;
+    height: 20px;
+    display: block;
+    pointer-events: none;
+    
+    path {
+      stroke: #605e5c;
+      stroke-width: 2;
+    }
+  }
+
+  .dots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1px solid #605e5c;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+    margin: 0;
+
+    &.active {
+      background: #d2d0ce;
+      border-color: #605e5c;
+    }
+
+    &:hover {
+      background: #e1dfdd;
+      border-color: #605e5c;
+    }
+  }
+
+  .pauseButton {
+    background: white;
+    border: 1px solid #605e5c;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 10px;
+    transition: all 0.3s ease;
+    min-width: 32px;
+    height: 32px;
+    box-sizing: border-box;
+
+    &:hover {
+      background: white;
+    }
+
+    &:active {
+      background: white;
+    }
+  }
+
+  .pauseIcon {
+    width: 16px;
+    height: 16px;
+    display: block;
+    pointer-events: none;
+    
+    path,
+    rect {
+      fill: #605e5c;
+    }
+  }
+
+  .loading,
+  .error,
+  .noNews {
+    text-align: center;
+    padding: 40px;
+    font-size: 16px;
+    color: $ms-color-neutralSecondary;
+  }
+
+  .error {
+    color: $ms-color-red;
+  }
+
+  @media screen and (max-width: 1024px) {
+    .carouselContainer {
+      padding: 0 32px;
+      min-height: 340px;
+    }
+
+    .carousel {
+      gap: 16px;
+      min-height: 340px;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .carouselContainer {
+      padding: 0 24px;
+      min-height: 340px;
+    }
+
+    .arrowLeft,
+    .arrowRight {
+      padding: 8px !important;
+    }
+
+    .arrowIcon {
+      width: 20px !important;
+      height: 20px !important;
+    }
+
+    .carousel {
+      padding-bottom: 24px;
+      min-height: 340px;
+    }
+
+    .header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .title {
+      margin-bottom: 12px;
+    }
+
+    .viewAllButton {
+      width: 100%;
+      text-align: center;
+    }
+  }
+}
