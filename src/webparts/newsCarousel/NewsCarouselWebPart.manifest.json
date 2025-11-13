@@ -3,7 +3,7 @@
   "id": "c36024c2-2b9c-4ff5-bf03-4b81938c8795",
   "alias": "NewsCarouselWebPart",
   "componentType": "WebPart",
-  "version": "1.0.0.5",
+  "version": "1.0.0.7",
   "manifestVersion": 2,
   "requiresCustomScript": false,
   "supportedHosts": ["SharePointWebPart"],

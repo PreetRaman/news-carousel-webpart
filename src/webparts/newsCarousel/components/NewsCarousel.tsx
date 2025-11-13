@@ -58,7 +58,7 @@ export default class NewsCarousel extends React.Component<INewsCarouselProps, {
     style.id = 'news-carousel-width-override';
     style.textContent = `
       [class*="newsCarousel_"] {
-        width: 90% !important;
+        width: 100% !important;
       }
     `;
     document.head.appendChild(style);
@@ -66,18 +66,18 @@ export default class NewsCarousel extends React.Component<INewsCarouselProps, {
   
   private applyWidthStyles(): void {
     const applyStyles = (): void => {
-      // Only apply 90% width to newsCarousel, not carouselContainer
+      // Only apply 100% width to newsCarousel, not carouselContainer
       if (this.carouselRef.current) {
-        this.carouselRef.current.style.setProperty('width', '90%', 'important');
-        this.carouselRef.current.style.setProperty('margin', '0 auto', 'important');
+        this.carouselRef.current.style.setProperty('width', '100%', 'important');
+        this.carouselRef.current.style.setProperty('margin', '0', 'important');
       }
       
       // Find and override all newsCarousel elements
       const carousels = document.querySelectorAll('[class*="newsCarousel_"]');
       carousels.forEach((carousel) => {
         const el = carousel as HTMLElement;
-        el.style.setProperty('width', '90%', 'important');
-        el.style.setProperty('margin', '0 auto', 'important');
+        el.style.setProperty('width', '100%', 'important');
+        el.style.setProperty('margin', '0', 'important');
       });
     };
     
@@ -212,12 +212,12 @@ export default class NewsCarousel extends React.Component<INewsCarouselProps, {
       console.log(`[News Carousel Render] Number of dots: ${newsItems.length}`);
     }
 
-    const containerStyle = { width: '90% !important', margin: '0 auto !important', maxWidth: 'none !important', display: 'block !important' };
+    const containerStyle = { width: '100% !important', margin: '0 !important', maxWidth: 'none !important', display: 'block !important' };
 
     if (loading) {
       return (
         <div ref={this.carouselRef} className={styles.newsCarousel} style={containerStyle}>
-          <div className={styles.loading}>Loading news...</div>
+          <div className={styles.loading}>Nachrichten werden geladen...</div>
         </div>
       );
     }
@@ -233,7 +233,7 @@ export default class NewsCarousel extends React.Component<INewsCarouselProps, {
     if (newsItems.length === 0) {
       return (
         <div ref={this.carouselRef} className={styles.newsCarousel} style={containerStyle}>
-          <div className={styles.noNews}>No news articles found.</div>
+          <div className={styles.noNews}>Keine Nachrichten gefunden.</div>
         </div>
       );
     }
@@ -286,7 +286,7 @@ export default class NewsCarousel extends React.Component<INewsCarouselProps, {
       <div ref={this.carouselRef} className={styles.newsCarousel} style={containerStyle}>
           <div className={(styles as Record<string, string>).header}>
             <h2 className={styles.title}>{title}</h2>
-            <a href={this.getViewAllNewsUrl()} className={(styles as Record<string, string>).viewAllButton} target="_blank" rel="noopener noreferrer">
+            <a target="_blank" rel="noopener noreferrer" data-interception="off" href={this.getViewAllNewsUrl()} className={(styles as Record<string, string>).viewAllButton}>
               Alle Anzeigen
             </a>
           </div>
@@ -305,21 +305,23 @@ export default class NewsCarousel extends React.Component<INewsCarouselProps, {
         
         <div className={styles.navigation}>
           <button className={styles.pauseButton} onClick={this.toggleAutoPlay}>
-            {this.state.isPaused ? (
-              <svg className={styles.pauseIcon} width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M6 4L12 8L6 12V4Z" fill="#605e5c"/>
-              </svg>
-            ) : (
-              <svg className={styles.pauseIcon} width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="5" y="4" width="2" height="8" rx="1" fill="#605e5c"/>
-                <rect x="9" y="4" width="2" height="8" rx="1" fill="#605e5c"/>
-              </svg>
-            )}
+            <div className={styles.pauseIcon}>
+              {this.state.isPaused ? (
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6 4L12 8L6 12V4Z" fill="#323130"/>
+                </svg>
+              ) : (
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="5" y="4" width="2" height="8" rx="1" fill="#323130"/>
+                  <rect x="9" y="4" width="2" height="8" rx="1" fill="#323130"/>
+                </svg>
+              )}
+            </div>
           </button>
           
           <button className={styles.arrowNavLeft} onClick={this.prevSlide}>
             <svg className={styles.arrowNavIcon} width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12.5 15L7.5 10L12.5 5" stroke="#605e5c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M12.5 15L7.5 10L12.5 5" stroke="#323130" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </button>
           
@@ -335,7 +337,7 @@ export default class NewsCarousel extends React.Component<INewsCarouselProps, {
           
           <button className={styles.arrowNavRight} onClick={this.nextSlide}>
             <svg className={styles.arrowNavIcon} width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M7.5 5L12.5 10L7.5 15" stroke="#605e5c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M7.5 5L12.5 10L7.5 15" stroke="#323130" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </button>
         </div>

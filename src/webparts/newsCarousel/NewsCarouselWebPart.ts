@@ -27,8 +27,8 @@ export default class NewsCarouselWebPart extends BaseClientSideWebPart<INewsCaro
   private _environmentMessage: string = '';
 
   public render(): void {
-    // Ensure the web part container allows 90% width
-    this.domElement.style.width = '90%!important';
+    // Ensure the web part container allows 100% width
+    this.domElement.style.width = '100%!important';
     this.domElement.style.maxWidth = 'none';
     
     // Also ensure parent containers don't constrain width
@@ -39,7 +39,7 @@ export default class NewsCarouselWebPart extends BaseClientSideWebPart<INewsCaro
           parent.classList.contains('CanvasSection') ||
           parent.classList.contains('ControlZone') ||
           parent.hasAttribute('data-sp-webpart')) {
-        parent.style.width = '90%!important';
+        parent.style.width = '100%!important';
         parent.style.maxWidth = 'none';
       }
       parent = parent.parentElement;
