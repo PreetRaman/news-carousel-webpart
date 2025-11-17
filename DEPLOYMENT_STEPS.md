@@ -15,7 +15,7 @@ gulp serve
 ```
 
 ### Step 3: Clear SharePoint Workbench Cache
-1. Open the workbench URL: `https://schaar365.sharepoint.com/sites/myWorkSpace/_layouts/workbench.aspx`
+1. Open the workbench URL
 2. Open Browser DevTools (F12)
 3. Go to **Application** tab (Chrome) or **Storage** tab (Edge)
 4. Under **Storage**, find **Local Storage** or **Session Storage**
@@ -52,9 +52,7 @@ If still not working, check the console for:
 
 ### Option A: Use Query String to Bypass Cache
 Add `?v=1.0.0.3` or `?nocache=true` to the workbench URL:
-```
-https://schaar365.sharepoint.com/sites/myWorkSpace/_layouts/workbench.aspx?nocache=true
-```
+``````
 
 ### Option B: Check Network Tab
 1. Open DevTools → Network tab
