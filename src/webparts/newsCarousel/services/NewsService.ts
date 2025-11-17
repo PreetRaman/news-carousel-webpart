@@ -523,6 +523,13 @@ export class NewsService {
           return false;
         }
         
+        // Exclude "Die Spezialisten für Immobilien-Maklerdienste" (case-insensitive)
+        if (this.stringIncludes(title, 'die spezialisten für immobilien-maklerdienste') || 
+            this.stringIncludes(title, 'spezialisten für immobilien-maklerdienste')) {
+          console.log(`  Excluding news item: "${item.Title}"`);
+          return false;
+        }
+        
         return true;
       });
 
@@ -611,7 +618,8 @@ export class NewsService {
     // SharePoint pages have a thumbnail endpoint
     if (item.FileLeafRef) {
       // Use SharePoint's thumbnail service for pages
-      return `${this.context.pageContext.web.absoluteUrl}/_layouts/15/getpreview.ashx?path=${encodeURIComponent(`${this.context.pageContext.web.serverRelativeUrl}/SitePages/${item.FileLeafRef}`)}&resolution=1`;
+      const previewUrl = `${this.context.pageContext.web.absoluteUrl}/_layouts/15/getpreview.ashx?path=${encodeURIComponent(`${this.context.pageContext.web.serverRelativeUrl}/SitePages/${item.FileLeafRef}`)}&resolution=6`;
+      return this.ensurePreviewResolution(previewUrl);
     }
     
     // Fallback to default thumbnail
@@ -640,14 +648,14 @@ export class NewsService {
       }
 
       if (trimmed.indexOf('http') === 0) {
-        return trimmed;
+        return this.ensurePreviewResolution(trimmed);
       }
 
       if (trimmed.indexOf('/') === 0) {
-        return `${this.context.pageContext.web.absoluteUrl}${trimmed}`;
+        return this.ensurePreviewResolution(`${this.context.pageContext.web.absoluteUrl}${trimmed}`);
       }
 
-      return `${this.context.pageContext.web.absoluteUrl}/${trimmed}`;
+      return this.ensurePreviewResolution(`${this.context.pageContext.web.absoluteUrl}/${trimmed}`);
     }
 
     const candidate = banner.Url || banner.url || banner.src || banner.value;
@@ -666,13 +674,13 @@ export class NewsService {
     // Look for data-sp-imgsrc (SharePoint stores image web parts like this)
     const dataSpImgSrcMatch = canvasContent.match(/data-sp-imgsrc="([^"]+)"/i);
     if (dataSpImgSrcMatch && dataSpImgSrcMatch[1]) {
-      return dataSpImgSrcMatch[1];
+      return this.ensurePreviewResolution(dataSpImgSrcMatch[1]);
     }
 
     // Fall back to first <img> tag
     const imgSrcMatch = canvasContent.match(/<img[^>]+src="([^"]+)"/i);
     if (imgSrcMatch && imgSrcMatch[1]) {
-      return imgSrcMatch[1];
+      return this.ensurePreviewResolution(imgSrcMatch[1]);
     }
 
     return null;
@@ -769,5 +777,27 @@ export class NewsService {
 
   private stringStartsWith(value: string, prefix: string): boolean {
     return value.indexOf(prefix) === 0;
+  }
+
+  private ensurePreviewResolution(url: string | null | undefined): string {
+    if (!url) {
+      return '';
+    }
+    const trimmed = url.trim();
+    if (!trimmed) {
+      return '';
+    }
+
+    const lower = trimmed.toLowerCase();
+    if (lower.indexOf('getpreview.ashx') === -1) {
+      return trimmed;
+    }
+
+    if (/[?&]resolution=\d+/i.test(trimmed)) {
+      return trimmed;
+    }
+
+    const separator = trimmed.indexOf('?') !== -1 ? '&' : '?';
+    return `${trimmed}${separator}resolution=6`;
   }
 }

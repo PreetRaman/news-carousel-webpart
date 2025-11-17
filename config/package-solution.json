@@ -3,7 +3,7 @@
   "solution": {
     "name": "news-carousel-client-side-solution",
     "id": "c747cbae-45d0-4db1-badb-fec60819c7e5",
-    "version": "1.0.0.10",
+    "version": "1.0.0.12",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": false,
     "isDomainIsolated": false,
@@ -30,7 +30,7 @@
         "title": "news-carousel Feature",
         "description": "The feature that activates elements of the news-carousel solution.",
         "id": "4b0ce9b1-80f1-4267-877c-faab93160f2e",
-        "version": "1.0.0.10"
+        "version": "1.0.0.12"
       }
     ]
   },

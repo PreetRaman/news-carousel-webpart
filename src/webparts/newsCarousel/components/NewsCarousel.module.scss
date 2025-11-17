@@ -30,6 +30,9 @@ $primaryColor: #302682;
 
 .newsCarousel {
   width: 100% !important;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
 
   .header {
     display: flex;
@@ -80,9 +83,9 @@ $primaryColor: #302682;
     justify-content: center;
     margin-bottom: 24px;
     width: 100%;
-    max-width: none;
-    margin-left: 0;
-    margin-right: 0;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
     min-height: 380px;
     padding: 0;
   }
@@ -93,6 +96,7 @@ $primaryColor: #302682;
     align-items: center;
     justify-content: center;
     width: 100%;
+    max-width: 1200px;
     min-height: 380px;
     padding: 0;
     overflow: visible;
@@ -151,7 +155,7 @@ $primaryColor: #302682;
     align-items: center;
     justify-content: center;
     gap: 16px;
-    margin-top: 20px;
+    margin-top: 3rem;
   }
 
   .arrowNavLeft,

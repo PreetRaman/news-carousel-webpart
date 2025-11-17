@@ -17,6 +17,7 @@ export default class NewsCarousel extends React.Component<INewsCarouselProps, {
   private carouselRef: React.RefObject<HTMLDivElement>;
   private containerRef: React.RefObject<HTMLDivElement>;
   private styleObserver: MutationObserver | null = null;
+  private instanceId: string; // Unique ID for this carousel instance
 
   constructor(props: INewsCarouselProps) {
     super(props);
@@ -30,6 +31,9 @@ export default class NewsCarousel extends React.Component<INewsCarouselProps, {
     this.newsService = new NewsService(this.props.context);
     this.carouselRef = React.createRef<HTMLDivElement>();
     this.containerRef = React.createRef<HTMLDivElement>();
+    // Generate a unique instance ID using timestamp and random number
+    // This ensures each carousel instance gets a different shuffle
+    this.instanceId = `carousel-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 
   public async componentDidMount(): Promise<void> {
@@ -125,22 +129,64 @@ export default class NewsCarousel extends React.Component<INewsCarouselProps, {
     }
   }
 
+  /**
+   * Seeded random number generator using the instance ID
+   * This ensures consistent but different shuffles for each carousel instance
+   */
+  private seededRandom(seed: string): () => number {
+    let hash = 0;
+    for (let i = 0; i < seed.length; i++) {
+      const char = seed.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32bit integer
+    }
+    let value = Math.abs(hash);
+    
+    return () => {
+      value = (value * 9301 + 49297) % 233280;
+      return value / 233280;
+    };
+  }
+
+  /**
+   * Shuffles an array using Fisher-Yates algorithm with seeded random
+   * This ensures each carousel instance gets a different random selection
+   * Uses a combination of seeded random (based on instance ID) and true random for maximum variation
+   */
+  private shuffleArray<T>(array: T[]): T[] {
+    const shuffled = [...array]; // Create a copy to avoid mutating the original
+    const seededRandom = this.seededRandom(this.instanceId);
+    
+    // Combine seeded random with true random for better variation
+    const getRandom = (): number => {
+      return (seededRandom() + Math.random()) / 2;
+    };
+    
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(getRandom() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  }
+
   private async loadNewsItems(): Promise<void> {
     try {
       const items = await this.newsService.getNewsItems();
       if (items.length === 0) {
         console.warn('No news items found. Check browser console for ContentType details.');
       }
-      // Limit to 9 items for the carousel - IMPORTANT: Only show first 9 items
+      // Shuffle items to ensure each carousel instance shows different news
+      const shuffledItems = this.shuffleArray(items);
+      // Limit to 9 items for the carousel - IMPORTANT: Only show first 9 items from shuffled array
       const MAX_ITEMS = 9;
-      const limitedItems = items.slice(0, MAX_ITEMS);
-      console.log(`[News Carousel] Total items fetched: ${items.length}`);
-      console.log(`[News Carousel] Limiting to ${MAX_ITEMS} items for carousel display`);
-      console.log(`[News Carousel] Items in carousel: ${limitedItems.length}`);
-      console.log(`[News Carousel] Item titles:`, limitedItems.map(item => item.title));
+      const limitedItems = shuffledItems.slice(0, MAX_ITEMS);
+      console.log(`[News Carousel ${this.instanceId}] Total items fetched: ${items.length}`);
+      console.log(`[News Carousel ${this.instanceId}] Shuffled and limiting to ${MAX_ITEMS} items for carousel display`);
+      console.log(`[News Carousel ${this.instanceId}] Items in carousel: ${limitedItems.length}`);
+      console.log(`[News Carousel ${this.instanceId}] Item titles:`, limitedItems.map(item => item.title));
       
       this.setState({
-        newsItems: limitedItems, // Only these 9 items will be in the carousel
+        newsItems: limitedItems, // Only these 9 randomly selected items will be in the carousel
         loading: false,
         error: items.length === 0 ? 'No news articles found. Please check the browser console for details.' : ''
       });
@@ -198,7 +244,7 @@ export default class NewsCarousel extends React.Component<INewsCarouselProps, {
   }
 
   private goToSlide = (index: number): void => {
-    this.setState({ currentIndex: index });
+    this.setState({ currentIndex: index }); 
   }
 
   public render(): React.ReactElement<INewsCarouselProps> {
